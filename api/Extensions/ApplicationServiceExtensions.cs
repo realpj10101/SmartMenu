@@ -1,0 +1,59 @@
+using System.Net.Http.Headers;
+using api.Settings;
+using Microsoft.Extensions.Options;
+using MongoDB.Driver;
+
+namespace api.Extensions;
+
+public static class ApplicationServiceExtensions
+{
+    public static IServiceCollection AddApplicationService(this IServiceCollection services, IConfiguration configuration)
+    {
+        #region MongoDbSettings
+        ///// get values from this file: appsettings.Development.json /////
+        // get section
+        services.Configure<MyMongoDbSettings>(configuration.GetSection(nameof(MyMongoDbSettings)));
+
+        // get values
+        services.AddSingleton<IMyMongoDbSettings>(serviceProvider =>
+        serviceProvider.GetRequiredService<IOptions<MyMongoDbSettings>>().Value);
+
+        // get connectionString to the db
+        services.AddSingleton<IMongoClient>(serviceProvider =>
+        {
+            MyMongoDbSettings uri = serviceProvider.GetRequiredService<IOptions<MyMongoDbSettings>>().Value;
+
+            return new MongoClient(uri.ConnectionString);
+        });
+        #endregion MongoDbSettings
+
+        #region Cors: baraye ta'eede Angular HttpClient requests
+        services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(policy =>
+                    policy.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:4200"));
+            });
+        #endregion Cors
+
+        #region Groq Settings
+        services.Configure<GrokSettings>(configuration.GetSection("Groq"));
+
+        services.AddHttpClient("GroqClient", (sp, client) =>
+        {
+            var cfg = sp.GetRequiredService<IOptions<GrokSettings>>().Value;
+
+            var baseUrl = cfg.BaseUrl.TrimEnd('/') + "/";
+
+            client.BaseAddress = new Uri(baseUrl);
+
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", cfg.ApiKey);
+
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
+        });
+        #endregion
+
+        return services;
+    }
+}
