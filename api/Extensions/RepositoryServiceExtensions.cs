@@ -1,5 +1,7 @@
+using api.Clients;
 using api.Interfaces;
 using api.Repositories;
+using api.Services;
 
 namespace api.Extensions;
 
@@ -8,6 +10,8 @@ public static class RepositoryServiceExtensions
     public static IServiceCollection AddRepositoryServices(this IServiceCollection services)
     {
         services.AddScoped<IMenuRepository, MenuRepository>();
+        services.AddScoped<IMenuEmbeddingService, MenuEmbeddingService>();
+        services.AddScoped<IOllamaEmbedClient, OllamaEmbedClient>();
 
         return services;
     }

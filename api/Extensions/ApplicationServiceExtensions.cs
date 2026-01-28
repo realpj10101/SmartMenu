@@ -35,23 +35,21 @@ public static class ApplicationServiceExtensions
             });
         #endregion Cors
 
-        #region Groq Settings
-        services.Configure<GrokSettings>(configuration.GetSection("Groq"));
 
-        services.AddHttpClient("GroqClient", (sp, client) =>
+        #region Ollama Sttings + HttpClient
+
+        services.AddHttpClient("OllamaClient", (sp, client) =>
         {
-            var cfg = sp.GetRequiredService<IOptions<GrokSettings>>().Value;
+            var cfg = sp.GetRequiredService<IOptions<OllamaSettings>>().Value;
 
             var baseUrl = cfg.BaseUrl.TrimEnd('/') + "/";
 
             client.BaseAddress = new Uri(baseUrl);
 
-            client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", cfg.ApiKey);
-
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
         });
+
         #endregion
 
         return services;
