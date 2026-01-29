@@ -21,3 +21,4 @@ public record MenuRecommendResponse(
     int TopN,
     List<MenuCandidateDto> Candidates
 );
+

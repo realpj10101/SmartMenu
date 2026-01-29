@@ -12,6 +12,7 @@ public static class RepositoryServiceExtensions
         services.AddScoped<IMenuRepository, MenuRepository>();
         services.AddScoped<IMenuEmbeddingService, MenuEmbeddingService>();
         services.AddScoped<IOllamaEmbedClient, OllamaEmbedClient>();
+        services.AddScoped<IMenuRecommendationService, MenuRecommendationService>();
 
         return services;
     }
