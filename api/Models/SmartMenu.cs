@@ -17,7 +17,7 @@ public class MenuCategory
 }
 
 public class MenuItem
-{
+{   
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
     public ObjectId Id { get; init; }

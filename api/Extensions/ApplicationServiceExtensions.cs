@@ -49,6 +49,7 @@ public static class ApplicationServiceExtensions
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
         });
+        
 
         #endregion
 
