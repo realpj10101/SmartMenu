@@ -37,19 +37,23 @@ public static class ApplicationServiceExtensions
 
 
         #region Ollama Sttings + HttpClient
+        
+        services.Configure<OllamaSettings>(
+            configuration.GetSection("Ollama"));
 
         services.AddHttpClient("OllamaClient", (sp, client) =>
         {
             var cfg = sp.GetRequiredService<IOptions<OllamaSettings>>().Value;
 
-            var baseUrl = cfg.BaseUrl.TrimEnd('/') + "/";
+            client.BaseAddress = new Uri(cfg.BaseUrl.TrimEnd('/') + "/");
 
-            client.BaseAddress = new Uri(baseUrl);
+            // ⏱️ LLM ها کند هستند → Timeout بالا
+            client.Timeout = TimeSpan.FromMinutes(10);
 
+            client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
         });
-        
 
         #endregion
 

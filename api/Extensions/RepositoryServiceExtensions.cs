@@ -13,6 +13,8 @@ public static class RepositoryServiceExtensions
         services.AddScoped<IMenuEmbeddingService, MenuEmbeddingService>();
         services.AddScoped<IOllamaEmbedClient, OllamaEmbedClient>();
         services.AddScoped<IMenuRecommendationService, MenuRecommendationService>();
+        services.AddScoped<IMenuRecommendExplainService, MenuRecommendExplainService>();
+        services.AddScoped<IOllamaChatClient, OllamaChatClient>();
 
         return services;
     }
