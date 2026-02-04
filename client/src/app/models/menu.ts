@@ -22,5 +22,13 @@ export interface MenuCandiate
     ingredients: string;
     imageUrl: string;
     priceValue: number;
+    sizes: MenuPriceSize[];
     score: number;
+}
+
+export interface MenuPriceSize
+{
+    size: string;
+    price: string;
+    priceValue: number;
 }
