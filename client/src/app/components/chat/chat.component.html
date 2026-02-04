@@ -1,0 +1,91 @@
+<section class="chat-container">
+    <div #historyEl class="history">
+        @for (msg of history(); track $index) {
+        <div class="message-row" [ngClass]="{'user': msg.role === 'user', 'agent': msg.role === 'agent'}">
+            @if (msg.role === 'agent') {
+            <div class="avatar agent-avatar">
+                <mat-icon class="bot-icon">smart_toy</mat-icon>
+            </div>
+            }
+
+            <div class="bubble">
+                <div class="bubble-wrapper" [ngClass]="{ 'user-order': msg.role === 'user'}">
+
+                    <div class="bubble" [ngClass]="msg.role">
+                        <p class="bubble-text">{{ msg.text }}</p>
+                    </div>
+
+                    @if (msg.meta?.candidates?.length) {
+                    <div class="items">
+                        @for (item of msg.meta?.candidates; track item.id; let i = $index) {
+                        <div class="item-card" [ngClass]="{ 'featured': i === 0 }">
+
+                            <div class="item-media">
+                                <img class="item-img" [src]="item.imageUrl" [alt]="item.persianName" loading="lazy"
+                                    referrerpolicy="no-referrer" />
+                            </div>
+
+                            <div class="item-body">
+                                <div class="item-head">
+                                    <div class="item-titles">
+                                        <h4 class="item-title">{{ item.persianName }}</h4>
+                                        <p class="item-subtitle">{{ item.englishName }}</p>
+                                    </div>
+
+                                    @if (item.priceValue) {
+                                    <div class="single-price">
+                                        <span class="price">{{ item.priceValue | number }}</span>
+                                        <span class="currency">تومان</span>
+                                    </div>
+                                    }
+
+                                    @else if (item.sizes.length) {
+                                    <div class="size-prices">
+                                        @for (s of item.sizes; track s.size) {
+                                        <div class="size-row">
+                                            <span class="size">{{ s.size }}</span>
+                                            <span class="dots"></span>
+                                            <span class="price">{{ s.priceValue | number }}</span>
+                                            <span class="currency">تومان</span>
+                                        </div>
+                                        }
+                                    </div>
+                                    }
+                                </div>
+
+                                <p class="item-ingredients">
+                                    {{ item.ingredients }}
+                                </p>
+                            </div>
+
+                        </div>
+                        }
+                    </div>
+                    }
+
+                    @if (msg.role === 'user') {
+                    <div class="avatar user-avatar" aria-label="User">
+                        <mat-icon class="user-icon">coffee</mat-icon>
+                    </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+        }
+    </div>
+    <div class="search-container">
+        <form>
+            <textarea #q class="inp" autoResize [formControl]="SearchCtrl" (keydown)="onKeyDown($event)"></textarea>
+            <button [disabled]="!SearchCtrl.value" class="btn" (click)="onSubmit()">
+                @if (loading()) {
+                <mat-progress-spinner class="btn__spinner" mode="indeterminate" [diameter]="20" [strokeWidth]="3">
+                </mat-progress-spinner>
+                }
+                @else {
+                <mat-icon>send</mat-icon>
+                }
+            </button>
+        </form>
+    </div>
+</section>
