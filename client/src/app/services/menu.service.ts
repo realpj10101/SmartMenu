@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 export class MenuService {
   private _http = inject(HttpClient);
   
-  private readonly _baseApiUrl = environment.apiUrl + 'menu/';
+  private readonly _baseApiUrl = environment.apiUrl + 'api/menu/';
 
   recommendTalk(req: MenuRecommnedReq): Observable<MenuRecommedRes> {
     return this._http.post<MenuRecommedRes>(this._baseApiUrl + 'menu-talk', req);
