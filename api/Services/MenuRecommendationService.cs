@@ -51,6 +51,7 @@ public class MenuRecommendationService : IMenuRecommendationService
                 Ingredients = item.Ingredients,
                 ImageUrl = item.ImageUrl,
                 PriceValue = item.PriceValue,
+                Sizes = item.Sizes,
                 Embedding = item.Embedding!,
             })
             .ToCursorAsync(cancellationToken);
@@ -80,6 +81,7 @@ public class MenuRecommendationService : IMenuRecommendationService
             Ingredients: item.Item.Ingredients,
             ImageUrl: item.Item.ImageUrl,
             PriceValue: item.Item.PriceValue,
+            Sizes: item.Item.Sizes,
             Score: item.Score
         )).ToList();
 
@@ -143,6 +145,8 @@ public class MenuRecommendationService : IMenuRecommendationService
         public string Ingredients { get; set; } = "";
         public string? ImageUrl { get; set; }
         public int? PriceValue { get; set; }
+
+        public List<MenuSizePrice> Sizes { get; set; }
         public float[] Embedding { get; set; } = Array.Empty<float>();
     }
 

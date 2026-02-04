@@ -42,9 +42,8 @@ public class MenuItem
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }
 
-public class MenuSizePrice
-{
-    public string Size { get; set; } = string.Empty;
-    public string Price { get; set; } = string.Empty;
-    public int PriceValue { get; set; }
-}
+public record MenuSizePrice(
+    string Size,
+    string Price,
+    int PriceValue
+);

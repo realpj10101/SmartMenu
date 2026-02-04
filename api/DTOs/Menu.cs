@@ -1,3 +1,5 @@
+using api.Models;
+
 namespace api.DTOs;
 
 public record MenuRecommendRequest(
@@ -13,6 +15,7 @@ public record MenuCandidateDto(
     string Ingredients,
     string? ImageUrl,
     int? PriceValue,
+    List<MenuSizePrice>? Sizes,
     double Score
 );
 
@@ -21,4 +24,5 @@ public record MenuRecommendResponse(
     int TopN,
     List<MenuCandidateDto> Candidates
 );
+
 
