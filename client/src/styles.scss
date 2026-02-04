@@ -1,1 +1,40 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+/* =========================
+   Base Theme Variables
+========================= */
+
+:root {
+  --background: #ffffff;
+  --foreground: #000000;
+}
+
+/* =========================
+   Garden Fresh Theme
+========================= */
+
+.theme-garden-fresh {
+  --background: #FAFAF8;
+  --foreground: #2E2E2E;
+  --card: #FFFFFF;
+  --card-foreground: #2E2E2E;
+  --popover: #FFFFFF;
+  --popover-foreground: #2E2E2E;
+  --primary: #6B8E23;
+  --primary-foreground: #FFFFFF;
+  --secondary: #f0f0ed;
+  --secondary-foreground: #2E2E2E;
+  --muted: #e8e8e4;
+  --muted-foreground: #5a5a5a;
+  --accent: #A8E6CF;
+  --accent-foreground: #2E2E2E;
+  --destructive: #dc3545;
+  --destructive-foreground: #FFFFFF;
+  --border: #d4d4d0;
+  --input: #e8e8e4;
+  --ring: #6B8E23;
+}
