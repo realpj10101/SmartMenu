@@ -4,7 +4,7 @@ using api.Interfaces;
 
 namespace api.Clients;
 
-public class OllamaChatClient : IOllamaChatClient
+public class OllamaChatClient : IChatClient
 {
     private readonly HttpClient _http;
 

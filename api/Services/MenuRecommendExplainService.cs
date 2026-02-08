@@ -9,11 +9,11 @@ public class MenuRecommendExplainService : IMenuRecommendExplainService
     private const string LlmModel = "qwen2.5:7b-instruct";
 
     private readonly IMenuRecommendationService _recommendationService;
-    private readonly IOllamaChatClient _chat;
+    private readonly IChatClient _chat;
 
     public MenuRecommendExplainService(
         IMenuRecommendationService recommendation,
-        IOllamaChatClient chat)
+        IChatClient chat)
     {
         _recommendationService = recommendation;
         _chat = chat;
@@ -113,7 +113,10 @@ public class MenuRecommendExplainService : IMenuRecommendExplainService
 
         var brief = stage1.Candidates.Select(c => new
         {
-            c.PersianName
+            c.PersianName,
+            c.CategoryNameFa,
+            Price = c.PriceValue,
+            Sizes = (c.PriceValue is null || c.PriceValue == 0) ? c.Sizes : null
         });
         
         string system = """

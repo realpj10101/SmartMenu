@@ -1,4 +1,5 @@
 using System.Net.Http.Headers;
+using api.Clients;
 using api.Settings;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -7,16 +8,18 @@ namespace api.Extensions;
 
 public static class ApplicationServiceExtensions
 {
-    public static IServiceCollection AddApplicationService(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddApplicationService(this IServiceCollection services,
+        IConfiguration configuration)
     {
         #region MongoDbSettings
+
         ///// get values from this file: appsettings.Development.json /////
         // get section
         services.Configure<MyMongoDbSettings>(configuration.GetSection(nameof(MyMongoDbSettings)));
 
         // get values
         services.AddSingleton<IMyMongoDbSettings>(serviceProvider =>
-        serviceProvider.GetRequiredService<IOptions<MyMongoDbSettings>>().Value);
+            serviceProvider.GetRequiredService<IOptions<MyMongoDbSettings>>().Value);
 
         // get connectionString to the db
         services.AddSingleton<IMongoClient>(serviceProvider =>
@@ -25,19 +28,22 @@ public static class ApplicationServiceExtensions
 
             return new MongoClient(uri.ConnectionString);
         });
+
         #endregion MongoDbSettings
 
         #region Cors: baraye ta'eede Angular HttpClient requests
+
         services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(policy =>
-                    policy.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:4200"));
-            });
+        {
+            options.AddDefaultPolicy(policy =>
+                policy.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:4200"));
+        });
+
         #endregion Cors
 
 
         #region Ollama Sttings + HttpClient
-        
+
         services.Configure<OllamaSettings>(
             configuration.GetSection("Ollama"));
 
@@ -49,6 +55,25 @@ public static class ApplicationServiceExtensions
 
             // ⏱️ LLM ها کند هستند → Timeout بالا
             client.Timeout = TimeSpan.FromMinutes(10);
+
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
+        });
+
+        #endregion
+
+        #region DeepSeek Settings + HttpClient
+
+        services.Configure<DeepSeekSettings>(
+            configuration.GetSection("DeepSeek"));
+
+        services.AddHttpClient("DeepSeekClient", (sp, client) =>
+        {
+            var cfg = sp.GetRequiredService<IOptions<DeepSeekSettings>>().Value;
+
+            client.BaseAddress = new Uri(cfg.BaseUrl.TrimEnd('/') + "/");
+            client.Timeout = TimeSpan.FromMinutes(2);
 
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
